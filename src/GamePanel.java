@@ -103,6 +103,13 @@ public class GamePanel extends JPanel implements ActionListener {
 
         if (!gameOver && !win) {
             if (frightTime > 0) frightTime = Math.max(0, frightTime - dt);
+            
+            if (speedBoostTime > 0) {
+    speedBoostTime = Math.max(0, speedBoostTime - dt);
+    if (speedBoostTime == 0 && pacman != null) {
+        pacman.speed = NORMAL_SPEED;
+    }
+}
             update(dt);
         }
         repaint();
@@ -124,7 +131,7 @@ public class GamePanel extends JPanel implements ActionListener {
         if (c == '.') {
             grid[ty][tx] = ' '; score += 10; pelletsLeft--;
         } else if (c == 'o') {
-            grid[ty][tx] = ' '; score += 50; pelletsLeft--; frightTime = 6.0;
+            grid[ty][tx] = ' '; score += 50; pelletsLeft--; frightTime = 6.0; speedBoostTime = 5.0; pacman.speed = BOOST_SPEED;
         }
     }
 
@@ -154,6 +161,9 @@ public class GamePanel extends JPanel implements ActionListener {
         ghosts.get(2).reset(1, 21);
         ghosts.get(3).reset(17, 21);
         frightTime = 0;
+        
+        speedBoostTime = 0;
+        if (pacman != null) pacman.speed = NORMAL_SPEED;
     }
 
     @Override
@@ -171,4 +181,5 @@ public class GamePanel extends JPanel implements ActionListener {
     public boolean isGameOver() { return gameOver; }
     public boolean isWin() { return win; }
     public double getFrightTime() { return frightTime; }
+    public double getSpeedBoostTime() { return speedBoostTime; }
 }
