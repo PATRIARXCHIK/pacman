@@ -85,6 +85,9 @@ public class GamePanel extends JPanel implements ActionListener {
         score = 0; lives = 3;
         gameOver = false; win = false; frightTime = 0;
         lastTime = System.nanoTime();
+
+        speedBoostTime = 0;
+        if (pacman != null) pacman.speed = NORMAL_SPEED;
     }
 
     public void restart() {
