@@ -46,6 +46,10 @@ public class GamePanel extends JPanel implements ActionListener {
     private boolean gameOver, win;
     private double frightTime;
     private long lastTime;
+    
+    private double speedBoostTime = 0;
+    private final double NORMAL_SPEED = 6.5;
+    private final double BOOST_SPEED = 9.0;
 
     private Timer timer;
     private GameRenderer renderer;
