@@ -49,6 +49,11 @@ public class GameRenderer {
         g2.setFont(HUD_FONT);
         g2.drawString("Score: " + game.getScore(), 10, 20);
         g2.drawString("Lives: " + game.getLives(), GamePanel.WIDTH - 90, 20);
+
+        if (game.getSpeedBoostTime() > 0) {
+    g2.setColor(Color.ORANGE);
+    g2.drawString("SPEED!", GamePanel.WIDTH - 80, 40);
+}
     }
 
     private void drawOverlay(Graphics2D g2, String text, Color color) {
