@@ -1,25 +1,21 @@
 import java.util.Random;
-
 public class CollisionHandler {
     private final GamePanel game;
     private int bonusX = -1, bonusY = -1;
     private double bonusTime = 0;
     private int pelletsEatenSinceBonus = 0;
     private int ghostCombo = 0;
-
-    public CollisionHandler(GamePanel game) {
-        this.game = game;
-    }
+    public CollisionHandler(GamePanel game) { this.game = game; }
 
     public void eatPellet(int tx, int ty) {
-        char c = game.getGrid()  ;
+        char c = game.getGrid()[ty][tx];
         if (c == '.') {
-            game.getGrid()  = ' ';
+            game.getGrid()[ty][tx] = ' ';
             game.setScore(game.getScore() + 10);
             game.setPelletsLeft(game.getPelletsLeft() - 1);
             pelletsEatenSinceBonus++;
         } else if (c == 'o') {
-            game.getGrid()   = ' ';
+            game.getGrid()[ty][tx] = ' ';
             game.setScore(game.getScore() + 50);
             game.setPelletsLeft(game.getPelletsLeft() - 1);
             game.setFrightTime(6.0);
@@ -55,22 +51,16 @@ public class CollisionHandler {
             game.getPacman().getTileX() == bonusX &&
             game.getPacman().getTileY() == bonusY) {
             game.setScore(game.getScore() + 100);
-            bonusX = -1;
-            bonusY = -1;
+            bonusX = -1; bonusY = -1;
         }
     }
 
     public void updateBonus(double dt) {
         if (bonusTime > 0) {
             bonusTime = Math.max(0, bonusTime - dt);
-            if (bonusTime == 0) {
-                bonusX = -1;
-                bonusY = -1;
-            }
+            if (bonusTime == 0) { bonusX = -1; bonusY = -1; }
         }
-        if (pelletsEatenSinceBonus >= 25 && bonusX == -1 && game.getPelletsLeft() > 10) {
-            spawnBonus();
-        }
+        if (pelletsEatenSinceBonus >= 25 && bonusX == -1 && game.getPelletsLeft() > 10) spawnBonus();
     }
 
     private void spawnBonus() {
@@ -78,12 +68,10 @@ public class CollisionHandler {
         for (int i = 0; i < 80; i++) {
             int x = r.nextInt(GamePanel.COLS);
             int y = r.nextInt(GamePanel.ROWS);
-            if (game.getGrid()  == ' ' &&
+            if (game.getGrid()[y][x] == ' ' &&
                 Math.abs(x - game.getPacman().getTileX()) +
                 Math.abs(y - game.getPacman().getTileY()) > 4) {
-                bonusX = x;
-                bonusY = y;
-                bonusTime = 8.0;
+                bonusX = x; bonusY = y; bonusTime = 8.0;
                 pelletsEatenSinceBonus = 0;
                 return;
             }
@@ -91,19 +79,12 @@ public class CollisionHandler {
     }
 
     public void reset() {
-        ghostCombo = 0;
-        bonusX = -1;
-        bonusY = -1;
-        bonusTime = 0;
-        pelletsEatenSinceBonus = 0;
+        ghostCombo = 0; bonusX = -1; bonusY = -1;
+        bonusTime = 0; pelletsEatenSinceBonus = 0;
     }
-
     public int getBonusX() { return bonusX; }
     public int getBonusY() { return bonusY; }
     public double getBonusTime() { return bonusTime; }
     public int getGhostCombo() { return ghostCombo; }
-
-    public void setGhostCombo(int ghostCombo) {
-        this.ghostCombo = ghostCombo;
-    }
+    public void setGhostCombo(int ghostCombo) { this.ghostCombo = ghostCombo; }
 }
