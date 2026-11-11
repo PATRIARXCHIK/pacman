@@ -1,4 +1,3 @@
-
 import java.awt.*;
 
 public class GameRenderer {
@@ -6,14 +5,14 @@ public class GameRenderer {
     private static final Font BIG_FONT = new Font("Arial", Font.BOLD, 36);
     private static final Font SMALL_FONT = new Font("Arial", Font.PLAIN, 18);
 
-    public void render(Graphics2D g2, GamePanel game) {
+    public void render(Graphics2D g2, GameController game) {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         drawMaze(g2, game);
         drawPacman(g2, (int) game.getPacman().pixelX(), (int) game.getPacman().pixelY(), game.getPacman());
 
         for (Ghost gh : game.getGhosts()) {
-            drawGhost(g2, (int) gh.pixelX(), (int) gh.pixelY(), gh, game.getFrightTime());
+            drawGhost(g2, (int) gh.pixelX(), (int) gh.pixelY(), gh, game.getState().frightTime);
         }
 
         drawHUD(g2, game);
@@ -22,56 +21,56 @@ public class GameRenderer {
         else if (game.isWin()) drawOverlay(g2, "YOU WIN!", Color.YELLOW);
     }
 
-    private void drawMaze(Graphics2D g2, GamePanel game) {
+    private void drawMaze(Graphics2D g2, GameController game) {
         char[][] grid = game.getGrid();
-        for (int r = 0; r < GamePanel.ROWS; r++) {
-            for (int c = 0; c < GamePanel.COLS; c++) {
+        for (int r = 0; r < GameConfig.ROWS; r++) {
+            for (int c = 0; c < GameConfig.COLS; c++) {
                 char ch = grid[r][c];
-                int x = c * GamePanel.TILE, y = r * GamePanel.TILE;
+                int x = c * GameConfig.TILE, y = r * GameConfig.TILE;
                 if (ch == '#') {
                     g2.setColor(new Color(30, 30, 180));
-                    g2.fillRect(x, y, GamePanel.TILE, GamePanel.TILE);
+                    g2.fillRect(x, y, GameConfig.TILE, GameConfig.TILE);
                     g2.setColor(new Color(80, 80, 220));
-                    g2.drawRect(x, y, GamePanel.TILE - 1, GamePanel.TILE - 1);
+                    g2.drawRect(x, y, GameConfig.TILE - 1, GameConfig.TILE - 1);
                 } else if (ch == '.') {
                     g2.setColor(Color.WHITE);
-                    g2.fillOval(x + GamePanel.TILE / 2 - 2, y + GamePanel.TILE / 2 - 2, 4, 4);
+                    g2.fillOval(x + GameConfig.TILE / 2 - 2, y + GameConfig.TILE / 2 - 2, 4, 4);
                 } else if (ch == 'o') {
                     g2.setColor(Color.WHITE);
-                    g2.fillOval(x + GamePanel.TILE / 2 - 5, y + GamePanel.TILE / 2 - 5, 10, 10);
+                    g2.fillOval(x + GameConfig.TILE / 2 - 5, y + GameConfig.TILE / 2 - 5, 10, 10);
                 }
             }
         }
     }
 
-    private void drawHUD(Graphics2D g2, GamePanel game) {
+    private void drawHUD(Graphics2D g2, GameController game) {
         g2.setColor(Color.WHITE);
         g2.setFont(HUD_FONT);
-        g2.drawString("Score: " + game.getScore(), 10, 20);
-        g2.drawString("Lives: " + game.getLives(), GamePanel.WIDTH - 90, 20);
+        g2.drawString("Score: " + game.getState().score, 10, 20);
+        g2.drawString("Lives: " + game.getState().lives, GameConfig.WIDTH - 90, 20);
 
-        if (game.getSpeedBoostTime() > 0) {
-    g2.setColor(Color.ORANGE);
-    g2.drawString("SPEED!", GamePanel.WIDTH - 80, 40);
-}
+        if (game.getState().speedBoostTime > 0) {
+            g2.setColor(Color.ORANGE);
+            g2.drawString("SPEED!", GameConfig.WIDTH - 80, 40);
+        }
     }
 
     private void drawOverlay(Graphics2D g2, String text, Color color) {
         g2.setColor(new Color(0, 0, 0, 190));
-        g2.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+        g2.fillRect(0, 0, GameConfig.WIDTH, GameConfig.HEIGHT);
         g2.setColor(color);
         g2.setFont(BIG_FONT);
         FontMetrics fm = g2.getFontMetrics();
-        g2.drawString(text, (GamePanel.WIDTH - fm.stringWidth(text)) / 2, GamePanel.HEIGHT / 2);
+        g2.drawString(text, (GameConfig.WIDTH - fm.stringWidth(text)) / 2, GameConfig.HEIGHT / 2);
         g2.setColor(Color.WHITE);
         g2.setFont(SMALL_FONT);
         String sub = "Press SPACE to restart";
         fm = g2.getFontMetrics();
-        g2.drawString(sub, (GamePanel.WIDTH - fm.stringWidth(sub)) / 2, GamePanel.HEIGHT / 2 + 40);
+        g2.drawString(sub, (GameConfig.WIDTH - fm.stringWidth(sub)) / 2, GameConfig.HEIGHT / 2 + 40);
     }
 
     private void drawPacman(Graphics2D g2, int px, int py, Player pacman) {
-        int r = GamePanel.TILE / 2 - 2;
+        int r = GameConfig.TILE / 2 - 2;
         int mouth = (int) (25 * (0.5 + 0.5 * Math.sin(System.currentTimeMillis() / 100.0)));
         int start = 0;
         if (pacman.getDx() == 1) start = 0;
@@ -95,7 +94,7 @@ public class GameRenderer {
         } else base = gh.color;
 
         g2.setColor(base);
-        int r = GamePanel.TILE / 2 - 2;
+        int r = GameConfig.TILE / 2 - 2;
         g2.fillArc(px - r, py - r, r * 2, r * 2, 0, 180);
         int bodyBottom = py + r - (int) (r * 0.4);
         g2.fillRect(px - r, py, r * 2, bodyBottom - py);
