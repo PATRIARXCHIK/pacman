@@ -6,23 +6,14 @@ public class LevelManager {
 
     private int level = 1;
     private final int maxLevel = 5;
-    private final GamePanel game;
+    private final GameController game;
 
-    public LevelManager(GamePanel game) {
-        this.game = game;
-    }
+    public LevelManager(GameController game) { this.game = game; }
 
     public int getLevel() { return level; }
-
     public boolean isMaxLevel() { return level >= maxLevel; }
-
-    public double getPacSpeed() {
-        return BASE_PAC_SPEED + (level - 1) * PAC_SPEED_PER_LEVEL;
-    }
-
-    public double getGhostSpeed() {
-        return BASE_GHOST_SPEED + (level - 1) * GHOST_SPEED_PER_LEVEL;
-    }
+    public double getPacSpeed() { return BASE_PAC_SPEED + (level - 1) * PAC_SPEED_PER_LEVEL; }
+    public double getGhostSpeed() { return BASE_GHOST_SPEED + (level - 1) * GHOST_SPEED_PER_LEVEL; }
 
     public void nextLevel() {
         if (level >= maxLevel) return;
