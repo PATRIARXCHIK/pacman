@@ -24,15 +24,17 @@ public class Maze {
         "#........#........#",
         "###################"
     };
+
     public static char[][] createGrid() {
-        char[][] grid = new char[GamePanel.ROWS][];
-        for (int r = 0; r < GamePanel.ROWS; r++) grid[r] = DATA[r].toCharArray();
+        char[][] grid = new char[GameConfig.ROWS][];
+        for (int r = 0; r < GameConfig.ROWS; r++) grid[r] = DATA[r].toCharArray();
         return grid;
     }
+
     public static int countPellets(char[][] grid) {
         int count = 0;
-        for (int r = 0; r < GamePanel.ROWS; r++)
-            for (int c = 0; c < GamePanel.COLS; c++)
+        for (int r = 0; r < GameConfig.ROWS; r++)
+            for (int c = 0; c < GameConfig.COLS; c++)
                 if (grid[r][c] == '.' || grid[r][c] == 'o') count++;
         return count;
     }
