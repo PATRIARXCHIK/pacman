@@ -1,7 +1,7 @@
 public class Player extends Entity {
     public int wantDx, wantDy;
 
-    public Player(GamePanel game, int tx, int ty, double speed) {
+    public Player(GameController game, int tx, int ty, double speed) {
         super(game, tx, ty, speed);
     }
 
