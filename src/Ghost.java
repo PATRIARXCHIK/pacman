@@ -45,21 +45,22 @@ public class Ghost extends Entity {
     }
 
     private void greedyMove(int tx, int ty) {
-        int[] dxs = {0, 1, 0, -1};
-        int[] dys = {-1, 0, 1, 0};
-        int bDx = dx, bDy = dy, best = Integer.MAX_VALUE;
-        for (int i = 0; i < 4; i++) {
-            int ndx = dxs[i], ndy = dys[i];
-            if (ndx == -dx && ndy == -dy && (dx != 0 || dy != 0)) continue;
-            if (!canMove(tileX + ndx, tileY + ndy)) continue;
-            int d = Math.abs(tileX + ndx - tx) + Math.abs(tileY + ndy - ty);
-            if (d < best) { best = d; bDx = ndx; bDy = ndy; }
-        }
-        if (best == Integer.MAX_VALUE && canMove(tileX - dx, tileY - dy)) {
-            bDx = -dx; bDy = -dy;
-        }
-        dx = bDx; dy = bDy;
+    int[] dxs = {0, 1, 0, -1};
+    int[] dys = {-1, 0, 1, 0};
+    int bDx = 0, bDy = 0, best = Integer.MAX_VALUE;
+    for (int i = 0; i < 4; i++) {
+        int ndx = dxs[i], ndy = dys[i];
+        if (ndx == -dx && ndy == -dy && (dx != 0 || dy != 0)) continue;
+        if (!canMove(tileX + ndx, tileY + ndy)) continue;
+        int d = Math.abs(tileX + ndx - tx) + Math.abs(tileY + ndy - ty);
+        if (d < best) { best = d; bDx = ndx; bDy = ndy; }
     }
+    if (best == Integer.MAX_VALUE) {
+        for (int i = 0; i < 4; i++)
+            if (canMove(tileX + dxs[i], tileY + dys[i])) { bDx = dxs[i]; bDy = dys[i]; break; }
+    }
+    dx = bDx; dy = bDy;
+}
 
     private void pickRandom() {
         int[] dxs = {0, 1, 0, -1};
