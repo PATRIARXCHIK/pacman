@@ -8,7 +8,7 @@ public class Ghost extends Entity {
     public boolean frightened;
     private final Random rand = new Random();
 
-    public Ghost(GameController game, int tx, int ty, double speed, Color color, int type) { // ТЕПЕРЬ GameController
+    public Ghost(GameController game, int tx, int ty, double speed, Color color, int type) {
         super(game, tx, ty, speed);
         this.color = color;
         this.type = type;
@@ -32,12 +32,12 @@ public class Ghost extends Entity {
         Player pacman = game.getPacman();
         int tx = pacman.getTileX(), ty = pacman.getTileY();
 
-        if (type == 1) { // Розовый - на 4 клетки вперед
+        if (type == 1) {
             tx += pacman.getDx() * 4;
             ty += pacman.getDy() * 4;
-        } else if (type == 2 && rand.nextDouble() < 0.15) { // Голубой - иногда случайно
+        } else if (type == 2 && rand.nextDouble() < 0.15) {
             pickRandom(); return;
-        } else if (type == 3) { // Оранжевый - убегает
+        } else if (type == 3) {
             int d = Math.abs(tileX - pacman.getTileX()) + Math.abs(tileY - pacman.getTileY());
             if (d < 6 && rand.nextDouble() < 0.5) { pickRandom(); return; }
         }

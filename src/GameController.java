@@ -18,13 +18,14 @@ public class GameController {
     public void init() {
         state.reset();
         levelManager.reset();
-        grid = Maze.createGrid();
+        grid = Maze.createGrid(levelManager.getLevel() - 1);
         state.pelletsLeft = Maze.countPellets(grid);
+
         pacman = new Player(this, PAC_SPAWN_X, PAC_SPAWN_Y, levelManager.getPacSpeed());
         ghosts = new ArrayList<>();
         for (int i = 0; i < GHOST_SPAWNS.length; i++) {
             ghosts.add(new Ghost(this, GHOST_SPAWNS[i][0], GHOST_SPAWNS[i][1],
-                levelManager.getGhostSpeed(), GHOST_COLORS[i], i));
+                    levelManager.getGhostSpeed(), GHOST_COLORS[i], i));
         }
         collisions.reset();
     }
@@ -71,7 +72,7 @@ public class GameController {
     }
 
     public void reloadMaze() {
-        grid = Maze.createGrid();
+        grid = Maze.createGrid(levelManager.getLevel() - 1);
         state.pelletsLeft = Maze.countPellets(grid);
     }
 

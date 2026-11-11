@@ -3,9 +3,8 @@ public abstract class Entity {
     protected int dx, dy;
     protected double progress, speed;
     public boolean justArrived;
-    protected GameController game; // ТЕПЕРЬ GameController
-
-    public Entity(GameController game, int tx, int ty, double speed) { // ТЕПЕРЬ GameController
+    protected GameController game;
+    public Entity(GameController game, int tx, int ty, double speed) {
         this.game = game;
         this.tileX = this.startX = tx;
         this.tileY = this.startY = ty;
