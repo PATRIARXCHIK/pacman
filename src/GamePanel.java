@@ -4,14 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GamePanel extends JPanel implements ActionListener {
-   
     private final GameController controller;
     private final GameRenderer renderer;
     private final Timer timer;
     private long lastTime;
 
     public GamePanel() {
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setPreferredSize(new Dimension(GameConfig.WIDTH, GameConfig.HEIGHT));
         setBackground(Color.BLACK);
         setFocusable(true);
 
