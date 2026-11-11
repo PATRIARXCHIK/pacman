@@ -53,6 +53,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     private Timer timer;
     private GameRenderer renderer;
+    private LevelManager levelManager;
 
     public GamePanel() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -60,7 +61,8 @@ public class GamePanel extends JPanel implements ActionListener {
         setFocusable(true);
 
         renderer = new GameRenderer();
-        addKeyListener(new InputHandler(this)); // Подключаем обработчик ввода
+        levelManager = new LevelManager(this);
+        addKeyListener(new InputHandler(this)); 
 
         initGame();
         timer = new Timer(16, this);
@@ -152,6 +154,7 @@ public class GamePanel extends JPanel implements ActionListener {
             }
         }
     }
+    
 
     private void resetPositions() {
         pacman.reset(9, 17);
