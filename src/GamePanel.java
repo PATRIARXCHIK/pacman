@@ -1,53 +1,42 @@
-public abstract class Entity {
-    protected int tileX, tileY, startX, startY;
-    protected int dx, dy;
-    protected double progress, speed;
-    public boolean justArrived;
-    protected GameController game;
 
-    public Entity(GameController game, int tx, int ty, double speed) {
-        this.game = game;
-        this.tileX = this.startX = tx;
-        this.tileY = this.startY = ty;
-        this.speed = speed;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class GamePanel extends JPanel implements ActionListener {
+    private final GameController controller;
+    private final GameRenderer renderer;
+    private final Timer timer;
+    private long lastTime;
+
+    public GamePanel() {
+        setPreferredSize(new Dimension(GameConfig.WIDTH, GameConfig.HEIGHT));
+        setBackground(Color.BLACK);
+        setFocusable(true);
+
+        controller = new GameController();
+        renderer = new GameRenderer();
+        addKeyListener(new InputHandler(controller));
+        controller.init();
+
+        lastTime = System.nanoTime();
+        timer = new Timer(16, this);
+        timer.start();
     }
 
-    public void reset(int tx, int ty) {
-        this.tileX = this.startX = tx;
-        this.tileY = this.startY = ty;
-        this.dx = this.dy = 0;
-        this.progress = 0;
-        this.justArrived = false;
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        long now = System.nanoTime();
+        double dt = Math.min((now - lastTime) / 1e9, 0.1);
+        lastTime = now;
+        controller.update(dt);
+        repaint();
     }
 
-    protected boolean canMove(int tx, int ty) {
-        if (tx < 0 || tx >= GameConfig.COLS || ty < 0 || ty >= GameConfig.ROWS) return false;
-        return game.getGrid()[ty][tx] != '#';
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        renderer.render((Graphics2D) g, controller);
     }
-
-    public double pixelX() { return (tileX + dx * progress + 0.5) * GameConfig.TILE; }
-    public double pixelY() { return (tileY + dy * progress + 0.5) * GameConfig.TILE; }
-
-    public void update(double dt) {
-        justArrived = false;
-        if (dx == 0 && dy == 0) {
-            onStopped();
-            if (dx == 0 && dy == 0) return;
-        }
-        progress += dt * speed;
-        if (progress >= 1) {
-            tileX += dx; tileY += dy;
-            progress = 0;
-            justArrived = true;
-            decideNextMove();
-        }
-    }
-
-    protected void onStopped() {}
-    protected abstract void decideNextMove();
-
-    public int getDx() { return dx; }
-    public int getDy() { return dy; }
-    public int getTileX() { return tileX; }
-    public int getTileY() { return tileY; }
 }
